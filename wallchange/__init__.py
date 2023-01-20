@@ -1,9 +1,10 @@
 import gettext
 import locale
+import os
 import pathlib
 import sys
 
-from . import mainwindow, callbacks
+from . import mainwindow, callbacks, setwallpaper
 
 LOCALEDIR = "@LOCALEDIR@"
 if LOCALEDIR == "@LOCALEDIR@":
