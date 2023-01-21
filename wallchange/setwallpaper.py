@@ -1,4 +1,5 @@
 import darkdetect
+import subprocess
 import sys
 import threading
 import wx
@@ -7,16 +8,26 @@ import wx.adv
 from . import callbacks
 
 
-def SetWallpaper(path: str):
+def SetWallpaper(path: str, mode):
+    """
+    Set wallpaper for supported platform(s):
+    * Windows (of course) - 10 (1607+)
+    * *NIX (Linux, BSD, and macOS)
+    """
     if sys.platform == "win32":
         from ctypes import windll
 
         windll.user32.SystemParametersInfoW(20, 0, path, 0)
     elif sys.platform == "linux":
-        import subprocess
-
         uri = "'file://%s'" % path
-        args = ["gsettings", "set", "org.gnome.desktop.background", "picture-uri", uri]
+        if mode == "dark":
+            schema = "picture-uri-dark"
+        else:
+            schema = "picture-uri"
+        args = ["gsettings", "set", "org.gnome.desktop.background", schema, uri]
+        subprocess.Popen(args)
+    elif sys.platform == "darwin":
+        args = ["wallpaper", path]
         subprocess.Popen(args)
     else:
         return wx.MessageDialog(
@@ -36,7 +47,7 @@ def AutoSet(filepath: str):
         theme = (
             theme.lower()
         )  # darkdetect.theme() returns Dark/Light, so we need to lower the fn input to dark/light
-        return SetWallpaper(childs[theme])
+        return SetWallpaper(childs[theme], theme)
 
     thread = threading.Thread(target=darkdetect.listener, args=(setwall,))
     thread.daemon = True

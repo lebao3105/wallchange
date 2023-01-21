@@ -1,21 +1,22 @@
 import gettext
 import locale
-import os
 import pathlib
 import sys
 
-from . import mainwindow, callbacks, setwallpaper
+from . import mainwindow, callbacks
 
 LOCALEDIR = "@LOCALEDIR@"
-if LOCALEDIR == "@LOCALEDIR@":
+IS_MESONTOUCHED = "@ISMESONTOUCHED@"  # Meson
+
+if LOCALEDIR == "@LOCALEDIR@" and IS_MESONTOUCHED != "True":
     LOCALEDIR = pathlib.Path(__file__).parent / "po"
 
+APP_ID = "me.lebao3105.wallchange"
 
-app_id = "me.lebao3105.wallchange"
 locale.setlocale(locale.LC_ALL, None)
-gettext.bindtextdomain(app_id, LOCALEDIR)
-gettext.textdomain(app_id)
-gettext.install(app_id)
+gettext.bindtextdomain(APP_ID, LOCALEDIR)
+gettext.textdomain(APP_ID)
+gettext.install(APP_ID)
 _ = gettext.gettext
 
 
@@ -36,7 +37,7 @@ def start_app():
             root.frame.buttons[1].SetLabel(darkbg)
             root.frame.filepath = args[1]
             root.frame.tree = tree
-            root.frame.SetTitle(_("WallChange - {}".format(args[1])))
+            root.frame.SetTitle("WallChange - {}".format(args[1]))
             root.frame.SetStatusText(args[1])
 
     root.MainLoop()

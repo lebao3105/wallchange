@@ -1,0 +1,124 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Le Bao Nguyen <bao12345yocoo@gmail.com>
+# This file is distributed under the same license as the me.lebao3105.wallchange package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: me.lebao3105.wallchange me.lebao3105.wallchange\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-01-21 15:14+0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: wallchange/callbacks.py:13
+msgid "Select your preferred background"
+msgstr ""
+
+#: wallchange/callbacks.py:23
+msgid "Open WallChange manifest"
+msgstr ""
+
+#: wallchange/callbacks.py:61 wallchange/mainwindow.py:113
+msgid "Save"
+msgstr ""
+
+#: wallchange/callbacks.py:80
+msgid "Image not found for background variant {}: {}"
+msgstr ""
+
+#: wallchange/mainwindow.py:30
+msgid "Toggle the auto-wallpaper service"
+msgstr ""
+
+#: wallchange/mainwindow.py:34
+msgid "About this app"
+msgstr ""
+
+#: wallchange/mainwindow.py:37
+msgid "Quit"
+msgstr ""
+
+#: wallchange/mainwindow.py:49
+msgid "No open file."
+msgstr ""
+
+#: wallchange/mainwindow.py:72
+msgid "&File"
+msgstr ""
+
+#: wallchange/mainwindow.py:77
+msgid "&Help"
+msgstr ""
+
+#: wallchange/mainwindow.py:97
+msgid "Light background"
+msgstr ""
+
+#: wallchange/mainwindow.py:100 wallchange/mainwindow.py:108
+msgid "Select a image"
+msgstr ""
+
+#: wallchange/mainwindow.py:105
+msgid "Dark background"
+msgstr ""
+
+#: wallchange/mainwindow.py:126
+msgid "Unknown"
+msgstr ""
+
+#: wallchange/mainwindow.py:128
+#, python-brace-format
+msgid ""
+"    Dynamically changes your desktop theme!\n"
+"    wxPython version: {wxver}\n"
+"    Python version: {pyver}\n"
+"    OS type: {ostype}\n"
+"        "
+msgstr ""
+
+#: wallchange/mainwindow.py:164
+msgid "Choose"
+msgstr ""
+
+#: wallchange/mainwindow.py:170
+msgid "Please select all required images before you continue."
+msgstr ""
+
+#: wallchange/mainwindow.py:171
+msgid "Missing component(s)"
+msgstr ""
+
+#: wallchange/mainwindow.py:203
+msgid "Start the wallpaper-set process now?"
+msgstr ""
+
+#: wallchange/mainwindow.py:204 wallchange/setwallpaper.py:52
+msgid "Infomation"
+msgstr ""
+
+#: wallchange/mainwindow.py:236
+msgid "Get all required images first, then click the 'Save' button to start."
+msgstr ""
+
+#: wallchange/mainwindow.py:238
+msgid "Error"
+msgstr ""
+
+#: wallchange/setwallpaper.py:31
+msgid "Your platform is not supported ({})."
+msgstr ""
+
+#: wallchange/setwallpaper.py:35
+msgid "Successfully changed your desktop wallpaper. Enjoy!"
+msgstr ""
+
+#: wallchange/setwallpaper.py:52
+msgid "The auto-wallpaper service has been started."
+msgstr ""

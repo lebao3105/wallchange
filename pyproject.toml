@@ -2,15 +2,20 @@
 name = "wallchange"
 version = "0.1.0"
 description = "Wallpaper changer for desktops"
+dependencies = [
+    'attrdict',
+    'darkdetect',
+    'wxpython'
+]
 authors = ["lebao3105 <bao12345yocoo@gmail.com>"]
 readme = "README.md"
 
-[tool.poetry.dependencies]
-python = "^3.8"
-wxpython = "^4.2.0"
-darkdetect = "^0.8.0"
-
-
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"wallchange" = "wallchange"}
+
+[project.gui-scripts]
+wallchange = "wallchange:start_app"

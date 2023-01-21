@@ -1,2 +1,4 @@
+attrdict # For wxPython
 darkdetect
+mac-wallpaper # For macOS
 wxpython

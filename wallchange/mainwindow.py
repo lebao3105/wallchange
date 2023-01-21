@@ -1,4 +1,5 @@
 import os
+import pathlib
 import platform
 import xml.etree.cElementTree as ET
 import wx
@@ -6,7 +7,8 @@ import wx.adv
 from . import callbacks, setwallpaper
 
 TRAY_TOOLTIP = "WallChange"
-TRAY_ICON = "C:\\Users\\Dell\\Pictures\\vanilla-night.png"
+ICON = "{}.svg".format("me.lebao3105.wallchange")
+TRAY_ICON = str(pathlib.Path(__file__).parent / "icons" / ICON)
 
 
 def create_menu_item(menu, label, func):
@@ -20,7 +22,7 @@ class TaskBarIcon(wx.adv.TaskBarIcon):
     def __init__(self, frame):
         super(wx.adv.TaskBarIcon, self).__init__()
         self.frame = frame
-        self.SetIcon(wx.Icon(wx.Bitmap(TRAY_ICON, wx.BITMAP_TYPE_ANY)), TRAY_TOOLTIP)
+        self.SetIcon(wx.Icon(wx.Bitmap(TRAY_ICON, wx.BITMAP_TYPE_ICO)), TRAY_TOOLTIP)
         self.Bind(wx.adv.EVT_TASKBAR_LEFT_DOWN, lambda evt: self.frame.Show())
 
     def CreatePopupMenu(self):
@@ -47,6 +49,7 @@ class MainWindow(wx.Frame):
 
         self.statusbar = self.CreateStatusBar()
         self.SetStatusText(_("No open file."))
+        self.SetIcon(wx.Icon(TRAY_ICON))
 
         self.isthreadon: bool = False
         self.isclosed: bool = False
@@ -132,6 +135,7 @@ class MainWindow(wx.Frame):
         """
         )
         aboutinf = wx.adv.AboutDialogInfo()
+        aboutinf.SetIcon(wx.Icon(wx.Bitmap(TRAY_ICON, wx.BITMAP_TYPE_ANY)))
         aboutinf.SetName("WallChange")
         aboutinf.SetDescription(msg)
         aboutinf.SetCopyright("(C) 2023 Le Bao Nguyen")
@@ -216,17 +220,15 @@ class MainWindow(wx.Frame):
         if os.path.isfile(self.buttons[1].GetLabel()):
             self.darkbg = self.buttons[1].GetLabel()
         self.isclosed = True
-        evt.Skip()
-
-    def IsShown(self):
-        try:
-            return super().IsShown()
-        except RuntimeError:  # Window killed
-            return False
+        # evt.Skip()
+        self.Hide()
 
     def ToggleMode(self):
         if self.isthreadon == True:
             del self.thread
+            setwallpaper.SendNotification(
+                _("Infomation"), _("Turned off auto wallpaper-set service.")
+            )
             return
 
         if self.IsShown() == True:
@@ -241,7 +243,7 @@ class MainWindow(wx.Frame):
                     _("Error"),
                     wx.OK | wx.ICON_ERROR,
                 ).ShowModal()
-                self.Show()
+                self.Show(True)
             else:
                 self.Save()
 
@@ -251,7 +253,6 @@ class App(wx.App):
         self.frame = MainWindow(None)
         TaskBarIcon(self.frame)
         self.SetTopWindow(self.frame)
-        self.SetExitOnFrameDelete(False)
         self.SetAppDisplayName("WallChange")
         self.frame.Show()
         return True

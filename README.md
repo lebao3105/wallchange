@@ -2,28 +2,19 @@
 An automated tool to set your desktop background!
 
 ## Running
-This project requires Python 3.8+ with pip installed. **No macOS support.**
+This project requires Python 3.8+ with pip installed. ~~**No macOS support here.**~~
 
-Use Poetry:
+Use meson:
 ```bash
-$ poetry install
-$ poetry run python3 -m wallchange [filepath] # Run
+$ meson setup build # Add --prefix=~/.local for local installation
+$ ninja -C build install
+$ me.lebao3105.wallchange [filepath] # Run
 ```
 
 Or:
 ```bash
 $ pip install -r requirements.txt
-$ python3 -m wallchange
-```
-
-> Tip: You can set the app not to show the window (access the app from the system tray):
-```bash
-$ RUN_SLIENT=True python3 -m wallchange [filepath]
-```
-
-(Windows)
-```cmd
-> set RUN_SLIENT=True & py -m wallchange [filepath]
+$ python3 -m wallchange [filepath] # Run
 ```
 
 ## Usage

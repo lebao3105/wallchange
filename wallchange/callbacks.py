@@ -71,6 +71,7 @@ def WriteNewFile(parent, light_bg: str, dark_bg: str):
         with open(dlg.GetPath(), "wb") as f:
             f.write('<?xml version="1.0" encoding="UTF-8"?>'.encode("utf-8"))
             ET.ElementTree(tree).write(f, "utf-8")
+        parent.filepath = dlg.GetPath()
 
 
 def ImageNotFound(element, img):
