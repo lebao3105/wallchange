@@ -36,6 +36,8 @@ You can close the app window, since the app is still accessable via the icon in 
 When the auto wallpaper-set service started and successfully set your wallpaper, it will show messages:
 ![image](https://user-images.githubusercontent.com/77564176/213847343-3bdabed4-3704-4197-81f8-9df09a72ac02.png)
 
+Wallpaper-set demostration:
+![link here](https://user-images.githubusercontent.com/77564176/213848497-3af86855-2e8a-4729-9728-2359acb27a12.webm)
 
 The configuration is saved in a XML file. Here's the content on my file:
 ```xml
