@@ -1,42 +1,42 @@
 #: wallchange/callbacks.py:13
 msgid "Select your preferred background"
-msgstr ""
+msgstr "Chon hinh nen ban muon"
 
 #: wallchange/callbacks.py:23
 msgid "Open WallChange manifest"
-msgstr ""
+msgstr "Mo manifest WallChange"
 
 #: wallchange/callbacks.py:61 wallchange/mainwindow.py:113
 msgid "Save"
-msgstr ""
+msgstr "Luu"
 
 #: wallchange/callbacks.py:80
 msgid "Image not found for background variant {}: {}"
-msgstr ""
+msgstr "Khong thay anh cho loai hinh nen {}: {}"
 
 #: wallchange/mainwindow.py:30
 msgid "Toggle the auto-wallpaper service"
-msgstr ""
+msgstr "Chuyen service hinh nen tu dong"
 
 #: wallchange/mainwindow.py:34
 msgid "About this app"
-msgstr ""
+msgstr "Ve ung dung nay"
 
 #: wallchange/mainwindow.py:37
 msgid "Quit"
-msgstr ""
+msgstr "Thoat"
 
 #: wallchange/mainwindow.py:49
 msgid "No open file."
-msgstr ""
+msgstr "Khong co tep nao duoc mo."
 
 #: wallchange/mainwindow.py:72
 msgid "&File"
-msgstr ""
+msgstr "&Tep"
 
 #: wallchange/mainwindow.py:77
 msgid "&Help"
-msgstr ""
+msgstr "Tro &giup"
 
 #: wallchange/mainwindow.py:97
 msgid "Light background"
@@ -52,7 +52,7 @@ msgstr "Hinh nen toi"
 
 #: wallchange/mainwindow.py:126
 msgid "Unknown"
-msgstr "Khong xac ding"
+msgstr "Khong xac dinh"
 
 #: wallchange/mainwindow.py:128
 #, python-brace-format
@@ -63,43 +63,47 @@ msgid ""
 "    OS type: {ostype}\n"
 "        "
 msgstr ""
-
+"   Dat hinh nen cho may tinh cua ban mot cach linh dong nhat!"
+"   Phien ban wxPython: {wxver}\n"
+"   Phien ban Python: {pyver}\n"
+"   He dieu hanh: {ostype}\n"
+"       "
 #: wallchange/mainwindow.py:164
 msgid "Choose"
 msgstr "Chon"
 
 #: wallchange/mainwindow.py:170
 msgid "Please select all required images before you continue."
-msgstr ""
+msgstr "Hay hoan thanh nhung thu duoc yeu cau truoc khi ban tiep tuc."
 
 #: wallchange/mainwindow.py:171
 msgid "Missing component(s)"
-msgstr ""
+msgstr "Thieu thanh phan"
 
 #: wallchange/mainwindow.py:203
 msgid "Start the wallpaper-set process now?"
-msgstr ""
+msgstr "Bat dau viec dat hinh nen bay gio?"
 
 #: wallchange/mainwindow.py:204 wallchange/setwallpaper.py:52
 msgid "Infomation"
-msgstr ""
+msgstr "Thong tin"
 
 #: wallchange/mainwindow.py:236
 msgid "Get all required images first, then click the 'Save' button to start."
-msgstr ""
+msgstr "Lay nhung thu duoc yeu cau truoc, roi bam vao nut 'Luu' de bat dau."
 
 #: wallchange/mainwindow.py:238
 msgid "Error"
-msgstr ""
+msgstr "Loi"
 
 #: wallchange/setwallpaper.py:31
 msgid "Your platform is not supported ({})."
-msgstr ""
+msgstr "He thong nay khong duoc ho tro ({})."
 
 #: wallchange/setwallpaper.py:35
 msgid "Successfully changed your desktop wallpaper. Enjoy!"
-msgstr ""
+msgstr "Dat hinh nen thanh cong cho desktop cua ban!"
 
 #: wallchange/setwallpaper.py:52
 msgid "The auto-wallpaper service has been started."
-msgstr ""
+msgstr "Service hinh nen tu dong da duoc bat."
