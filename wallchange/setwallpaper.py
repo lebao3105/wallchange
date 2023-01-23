@@ -9,11 +9,6 @@ from . import callbacks
 
 
 def SetWallpaper(path: str, mode):
-    """
-    Set wallpaper for supported platform(s):
-    * Windows (of course) - 10 (1607+)
-    * *NIX (Linux, BSD, and macOS)
-    """
     if sys.platform == "win32":
         from ctypes import windll
 

@@ -4,7 +4,6 @@ import pathlib
 import sys
 
 from . import mainwindow, callbacks
-
 LOCALEDIR = "@LOCALEDIR@"
 IS_MESONTOUCHED = "@ISMESONTOUCHED@"  # Meson
 

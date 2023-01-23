@@ -8,7 +8,7 @@ from . import callbacks, setwallpaper
 
 TRAY_TOOLTIP = "WallChange"
 ICON = "{}.svg".format("me.lebao3105.wallchange")
-TRAY_ICON = str(pathlib.Path(__file__).parent / "icons" / ICON)
+TRAY_ICON = str(pathlib.Path(__file__).parent / ".." / "icons" / ICON)
 
 
 def create_menu_item(menu, label, func):
@@ -22,7 +22,7 @@ class TaskBarIcon(wx.adv.TaskBarIcon):
     def __init__(self, frame):
         super(wx.adv.TaskBarIcon, self).__init__()
         self.frame = frame
-        self.SetIcon(wx.Icon(wx.Bitmap(TRAY_ICON, wx.BITMAP_TYPE_ICO)), TRAY_TOOLTIP)
+        self.SetIcon(wx.Icon(wx.Bitmap(TRAY_ICON, wx.BITMAP_TYPE_ANY)), TRAY_TOOLTIP)
         self.Bind(wx.adv.EVT_TASKBAR_LEFT_DOWN, lambda evt: self.frame.Show())
 
     def CreatePopupMenu(self):
@@ -37,7 +37,7 @@ class TaskBarIcon(wx.adv.TaskBarIcon):
         create_menu_item(
             menu,
             _("Quit"),
-            lambda evt: (wx.CallAfter(self.Destroy), self.frame.Close(), exit(0)),
+            lambda evt: (wx.CallAfter(exit), self.frame.Close(), self.Destroy()),
         )
         return menu
 
@@ -49,7 +49,7 @@ class MainWindow(wx.Frame):
 
         self.statusbar = self.CreateStatusBar()
         self.SetStatusText(_("No open file."))
-        self.SetIcon(wx.Icon(TRAY_ICON))
+        self.SetIcon(wx.Icon(TRAY_ICON, wx.BITMAP_TYPE_ANY))
 
         self.isthreadon: bool = False
         self.isclosed: bool = False
@@ -84,6 +84,7 @@ class MainWindow(wx.Frame):
             cmds["close"]: lambda evt: self.CloseFile(),
             cmds["save"]: lambda evt: self.Save(),
             cmds["about"]: lambda evt: self.About(),
+            cmds["exit"]: lambda evt: self.Close()
         }
 
         for item in allcmds:

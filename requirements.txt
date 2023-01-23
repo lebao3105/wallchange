@@ -1,4 +1,4 @@
-#attrdict # For wxPython
+attrdict3 # For wxPython - see https://github.com/wxWidgets/Phoenix/issues/2225#issuecomment-1209569516
 darkdetect
 mac-wallpaper;sys_platform=="darwin" # For macOS
 wxpython

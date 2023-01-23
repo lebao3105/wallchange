@@ -46,6 +46,7 @@ You can change the path in the ```image``` tag under both ```dark``` and ```ligh
 
 ## Issue(s)
 * If you use GNOME 42+, you may see that your wallpaper used in this program not used in your desktop when you change the system color. It occurred due to the new wallpaper system (WallChange based on that). Now I fixed it by setting another schema path for dark mode (/org/gnome/desktop/background/picture-uri-dark).
+* It is recommended to set this app to run automatically on log-in.
 
 ## Inspirations
 * [Dynamic-wallpaper](https://github.com/dusansimic/dynamic-wallpaper)
