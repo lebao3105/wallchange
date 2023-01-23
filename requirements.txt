@@ -1,4 +1,4 @@
-attrdict # For wxPython
+#attrdict # For wxPython
 darkdetect
 mac-wallpaper;sys_platform=="darwin" # For macOS
 wxpython
