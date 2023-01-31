@@ -128,11 +128,11 @@ class MainWindow(wx.Frame):
         pyver = platform.python_version()
         ostype = platform.system() if platform.system() != "" else _("Unknown")
         msg = _(
-            f"""\
-    Dynamically changes your desktop theme!
-    wxPython version: {wxver}
-    Python version: {pyver}
-    OS type: {ostype}
+        f"""\
+        Dynamically theme your desktop (background)!
+        wxPython version: {wxver}
+        Python version: {pyver}
+        OS type: {ostype}
         """
         )
         aboutinf = wx.adv.AboutDialogInfo()
@@ -248,12 +248,3 @@ class MainWindow(wx.Frame):
             else:
                 self.Save()
 
-
-class App(wx.App):
-    def OnInit(self):
-        self.frame = MainWindow(None)
-        TaskBarIcon(self.frame)
-        self.SetTopWindow(self.frame)
-        self.SetAppDisplayName("WallChange")
-        self.frame.Show()
-        return True

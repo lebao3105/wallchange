@@ -20,7 +20,8 @@ def OpenImg(parent, obj):
 
 def OpenXML(parent):
     dlg = wx.FileDialog(
-        parent, _("Open WallChange manifest"), wildcard="XML File (*.xml)|*.xml"
+        parent, _("Open WallChange manifest"), wildcard="XML File (*.xml)|*.xml",
+        style=wx.FD_FILE_MUST_EXIST
     )
     if dlg.ShowModal() != wx.ID_CANCEL:
         return dlg.GetPath()
@@ -30,9 +31,9 @@ def OpenXML(parent):
 
 def ReadXML(path: str):
     def check_tag(tag: str):
-        tags = ["light", "dark", "configs"]
+        tags = ["light", "dark"]
         if not tag in tags:
-            raise XMLParseError
+            raise XMLParseError("Required tags not found: light, dark")
 
     all_childs = {}
     tree = ET.parse(path)
@@ -43,14 +44,17 @@ def ReadXML(path: str):
         )
     else:
         for child in tree.getroot():
-            check_tag(child.tag)
-            if child.tag != "configs":
-                img = child.find("image").text
-                if os.path.isfile(img):
-                    all_childs[child.tag] = img
-                else:
-                    ImageNotFound(child.tag, img)
-                    raise XMLParseError
+            try:
+                check_tag(child.tag)
+            except XMLParseError:
+                break
+            
+            img = child.find("image").text
+            if os.path.isfile(img):
+                all_childs[child.tag] = img
+            else:
+                ImageNotFound(child.tag, img)
+                raise XMLParseError
 
         return all_childs, tree.getroot()
 
@@ -69,8 +73,8 @@ def WriteNewFile(parent, light_bg: str, dark_bg: str):
         ET.SubElement(lightbg, "image").text = light_bg
         ET.SubElement(darkbg, "image").text = dark_bg
         with open(dlg.GetPath(), "wb") as f:
-            f.write('<?xml version="1.0" encoding="UTF-8"?>'.encode("utf-8"))
-            ET.ElementTree(tree).write(f, "utf-8")
+            f.write('<?xml version="1.0" encoding="UTF-8"?>\n'.encode("utf-8"))
+            f.write(ET.tostring(tree, 'utf-8'))
         parent.filepath = dlg.GetPath()
 
 

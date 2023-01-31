@@ -2,18 +2,34 @@
 An automated tool to set your desktop background!
 
 ## Running
-This project requires Python 3.8+ with pip installed. ~~**No macOS support here.**~~
+This project requires Python 3.8+ with pip installed. Tested on **Windows** and **Linux**.
 
-Use meson:
+Install dependencies first:
+```bash
+$ pip install attrdict3
+$ pip install -r requirements.txt
+```
+
+Use meson to install:
 ```bash
 $ meson setup build # Add --prefix=~/.local for local installation
 $ ninja -C build install
 $ me.lebao3105.wallchange [filepath] # Run
 ```
 
+Or install using generated wheels on (https://github.com/lebao3105/wallchange/actions/workflows/wheels.yml):
+```bash
+$ pip install <downloaded .whl file> --force-reinstall
+```
+
 Or:
 ```bash
-$ pip install -r requirements.txt
+$ pip install build wheel
+$ pip install . --force-reinstall
+```
+
+Run without installing:
+```bash
 $ python3 -m wallchange [filepath] # Run
 ```
 
@@ -32,6 +48,7 @@ Wallpaper-set demostration:
 
 The configuration is saved in a XML file. Here's the content on my file:
 ```xml
+<? xml version="1.0" encoding="UTF-8"?>
 <data>
     <light>
         <image>C:\Users\Dell\Pictures\vanilla-day.png</image>

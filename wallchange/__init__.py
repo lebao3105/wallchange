@@ -2,6 +2,7 @@ import gettext
 import locale
 import pathlib
 import sys
+import wx
 
 from . import mainwindow, callbacks
 LOCALEDIR = "@LOCALEDIR@"
@@ -16,13 +17,17 @@ locale.setlocale(locale.LC_ALL, None)
 gettext.bindtextdomain(APP_ID, LOCALEDIR)
 gettext.textdomain(APP_ID)
 gettext.install(APP_ID)
-_ = gettext.gettext
 
 
 def start_app():
-    args = sys.argv
-    argc = len(args) - 1
-    root = mainwindow.App(0)
+    args = sys.argv[1:]
+    argc = len(args)
+
+    root = wx.App()
+    mainwind = mainwindow.MainWindow(None, title="WallChange")
+    mainwindow.TaskBarIcon(mainwind)
+    root.SetTopWindow(mainwind)
+    mainwind.Show()
 
     if argc > 0:
         try:
