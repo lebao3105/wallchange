@@ -1,0 +1,32 @@
+name: Build Wheels
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      
+      - name: Install dependencies
+        run: |
+          sudo apt install python3-pip python3-dev libgtk-3-dev -y
+          pip3 install build wheel attrdict3
+          pip3 install -r requirements.txt
+      
+      - name: Build
+        run: |
+          python3 -m build
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: WallChange_Wheels
+          path: dist/
