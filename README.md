@@ -1,3 +1,4 @@
+[![Build Wheels](https://github.com/lebao3105/wallchange/actions/workflows/wheels.yml/badge.svg)](https://github.com/lebao3105/wallchange/actions/workflows/wheels.yml)
 ## Wallchange
 An automated tool to set your desktop background!
 
