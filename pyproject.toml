@@ -6,7 +6,6 @@ dependencies = [
     'darkdetect',
     'wxpython'
 ]
-authors = ["lebao3105 <bao12345yocoo@gmail.com>"]
 readme = "README.md"
 
 [build-system]
