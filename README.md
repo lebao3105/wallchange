@@ -41,6 +41,8 @@ Choose your preferred image for each sections, click "Save" if you want to save 
 
 You can close the app window, since the app is still accessable via the icon in the system tray.
 
+Don't what to be notified when the wallpapaer changes? Set the option in the File menu. Save to the file if you want.
+
 When the auto wallpaper-set service started and successfully set your wallpaper, it will show messages:
 ![image](https://user-images.githubusercontent.com/77564176/213847343-3bdabed4-3704-4197-81f8-9df09a72ac02.png)
 
@@ -49,8 +51,12 @@ Wallpaper-set demostration:
 
 The configuration is saved in a XML file. Here's the content on my file:
 ```xml
-<? xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <data>
+    <!--0.1.1-->
+    <config>
+	  <notif>True</notif>
+    </config>
     <light>
         <image>C:\Users\Dell\Pictures\vanilla-day.png</image>
     </light>
