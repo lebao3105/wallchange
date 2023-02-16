@@ -5,10 +5,10 @@ import threading
 import wx
 import wx.adv
 
-from . import callbacks
+from . import imports
 
 
-def SetWallpaper(path: str, mode):
+def SetWallpaper(path: str, mode) -> bool:
     if sys.platform == "win32":
         from ctypes import windll
 
@@ -25,18 +25,22 @@ def SetWallpaper(path: str, mode):
         args = ["wallpaper", path]
         subprocess.Popen(args)
     else:
-        return wx.MessageDialog(
+        wx.MessageDialog(
             wx.Frame(),
             _("Your platform is not supported ({}).".format(sys.platform)),
             style=wx.OK | wx.ICON_INFORMATION,
         ).ShowModal()
-    return SendNotification(
-        "WallChange", _("Successfully changed your desktop wallpaper. Enjoy!")
-    )
+        return False
+    
+    if imports.NOTIF:
+        return SendNotification(
+            "WallChange", _("Successfully changed your desktop wallpaper. Enjoy!")
+        )
+    else:
+        return True
 
 
-def AutoSet(filepath: str):
-    childs = callbacks.ReadXML(filepath)[0]
+def AutoSet(childs:dict):
 
     def setwall(theme: str):
         theme = (

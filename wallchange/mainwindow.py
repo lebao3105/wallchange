@@ -4,7 +4,8 @@ import platform
 import xml.etree.cElementTree as ET
 import wx
 import wx.adv
-from . import callbacks, setwallpaper
+
+from . import callbacks, setwallpaper, imports
 
 TRAY_TOOLTIP = "WallChange"
 ICON = "{}.svg".format("me.lebao3105.wallchange")
@@ -22,7 +23,7 @@ class TaskBarIcon(wx.adv.TaskBarIcon):
     def __init__(self, frame):
         super(wx.adv.TaskBarIcon, self).__init__()
         self.frame = frame
-        self.SetIcon(wx.Icon(wx.Bitmap(TRAY_ICON, wx.BITMAP_TYPE_ANY)), TRAY_TOOLTIP)
+        self.SetIcon(wx.Icon(TRAY_ICON), TRAY_TOOLTIP)
         self.Bind(wx.adv.EVT_TASKBAR_LEFT_DOWN, lambda evt: self.frame.Show())
 
     def CreatePopupMenu(self):
@@ -49,10 +50,11 @@ class MainWindow(wx.Frame):
 
         self.statusbar = self.CreateStatusBar()
         self.SetStatusText(_("No open file."))
-        self.SetIcon(wx.Icon(TRAY_ICON, wx.BITMAP_TYPE_ANY))
+        # self.SetIcon(wx.Icon(TRAY_ICON, wx.BITMAP_TYPE_ANY))
 
         self.isthreadon: bool = False
         self.isclosed: bool = False
+        self.reader = callbacks.XmlReader(self, skip_file_read=True)
 
         self.SetTitle("WallChange")
         self.SetSize(700, 600)
@@ -71,6 +73,9 @@ class MainWindow(wx.Frame):
         cmds["close"] = filemenu.Append(wx.ID_CLOSE)
         cmds["save"] = filemenu.Append(wx.ID_SAVE)
         cmds["exit"] = filemenu.Append(wx.ID_EXIT)
+        filemenu.AppendSeparator()
+        cmds["notif"] = wx.MenuItem(filemenu, wx.ID_ANY, _("Don't notify me on wallpaper changes"))
+        filemenu.Append(cmds["notif"])
         menu.Append(filemenu, _("&File"))
 
         # Help
@@ -84,11 +89,16 @@ class MainWindow(wx.Frame):
             cmds["close"]: lambda evt: self.CloseFile(),
             cmds["save"]: lambda evt: self.Save(),
             cmds["about"]: lambda evt: self.About(),
-            cmds["exit"]: lambda evt: self.Close()
+            cmds["exit"]: lambda evt: self.Close(),
+            cmds["notif"]: lambda evt: self.ToggleNotify(cmds["notif"])
         }
 
         for item in allcmds:
             self.Bind(wx.EVT_MENU, allcmds[item], item)
+
+        self.timer = wx.Timer()
+        self.timer.Start()
+        self.Bind(wx.EVT_TIMER, lambda evt: self.ToggleNotify(cmds["notif"], True))
 
         self.SetMenuBar(menu)
 
@@ -100,7 +110,7 @@ class MainWindow(wx.Frame):
         label1 = wx.StaticText(panel, -1, _("Light background"))
         sizer.Add(label1, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 5)
 
-        button_1 = wx.Button(panel, -1, _("Select a image"))
+        button_1 = wx.Button(panel, -1, _("Select an image"))
         button_1.Bind(wx.EVT_BUTTON, lambda evt: callbacks.OpenImg(self, button_1))
         sizer.Add(button_1, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 5)
 
@@ -108,7 +118,7 @@ class MainWindow(wx.Frame):
         label2 = wx.StaticText(panel, -1, _("Dark background"))
         sizer.Add(label2, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 5)
 
-        button_2 = wx.Button(panel, -1, _("Select a image"))
+        button_2 = wx.Button(panel, -1, _("Select an image"))
         button_2.Bind(wx.EVT_BUTTON, lambda evt: callbacks.OpenImg(self, button_2))
         sizer.Add(button_2, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 5)
 
@@ -136,69 +146,53 @@ class MainWindow(wx.Frame):
         """
         )
         aboutinf = wx.adv.AboutDialogInfo()
-        aboutinf.SetIcon(wx.Icon(wx.Bitmap(TRAY_ICON, wx.BITMAP_TYPE_ANY)))
+        # aboutinf.SetIcon(wx.Icon(TRAY_ICON))
         aboutinf.SetName("WallChange")
         aboutinf.SetDescription(msg)
-        aboutinf.SetCopyright("(C) 2023 Le Bao Nguyen")
+        aboutinf.SetCopyright("(C) 2022-2023 Le Bao Nguyen")
         aboutinf.AddDeveloper("Le Bao Nguyen")
         return wx.adv.AboutBox(aboutinf)
 
-    def OpenFile(self):
+    def OpenFile(self) -> bool:
         filepath = callbacks.OpenXML(self)
         if filepath is False:
-            return
+            return False
         else:
-            try:
-                childs, tree = callbacks.ReadXML(filepath)
-            except callbacks.XMLParseError:
-                return
-        lightbg = childs["light"]
-        darkbg = childs["dark"]
-        self.buttons[0].SetLabel(lightbg)
-        self.buttons[1].SetLabel(darkbg)
-        self.filepath = filepath
-        self.tree = tree
-        self.SetTitle("WallChange - {}".format(filepath))
-        self.SetStatusText(filepath)
-        self.Refresh()
+            # try:
+            #     self.reader.read(filepath)
+            # except callbacks.XMLParseError:
+            #     return False
+            self.reader.read(filepath)
+            
+            self.buttons[0].SetLabel(self.reader.images["light"])
+            self.buttons[1].SetLabel(self.reader.images["dark"])
+            imports.NOTIF = bool(self.reader.configs["notif"])
+
+            self.SetTitle("WallChange - {}".format(filepath))
+            self.SetStatusText(filepath)
+            self.Refresh()
 
     def CloseFile(self):
         for item in self.buttons:
-            item.SetLabel(_("Choose"))
+            item.SetLabel(_("Select an image"))
 
     def Save(self):
         def showdialog():
             return wx.MessageDialog(
                 self,
-                _("Please select all required images before you continue."),
-                _("Missing component(s)"),
+                _("Image not found, or you have not filled this section yet."),
+                _("Error"),
                 style=wx.OK | wx.ICON_ERROR,
             ).ShowModal()
 
-        if hasattr(self, "lightbg" and "darkbg"):
-            lightbg = self.lightbg
-            darkbg = self.darkbg
-        else:
-            for item in self.buttons:
-                if not os.path.isfile(item.GetLabel()):
-                    return showdialog()
-                else:
-                    lightbg = self.buttons[0].GetLabel()
-                    darkbg = self.buttons[1].GetLabel()
+        for button in self.buttons:
+            if not os.path.isfile(button.GetLabel()):
+                return showdialog()
+            
+        self.reader.images["light"] = self.buttons[0].GetLabel()
+        self.reader.images["dark"] = self.buttons[1].GetLabel()
 
-        if hasattr(self, "filepath"):
-            for item in self.tree:
-                if item.tag == "dark":
-                    item.find("image").text = darkbg
-                elif item.tag == "light":
-                    item.find("image").text = lightbg
-
-            with open(self.filepath, "wb") as f:
-                ET.ElementTree(self.tree).write(f, "utf-8")
-        else:
-            callbacks.WriteNewFile(
-                self, self.buttons[0].GetLabel(), self.buttons[1].GetLabel()
-            )
+        self.reader.writenew(True if not os.path.isfile(self.GetStatusBar().GetStatusText()) else False)
 
         if self.isclosed == False:
             dlg = wx.MessageDialog(
@@ -208,20 +202,20 @@ class MainWindow(wx.Frame):
                 style=wx.YES_NO,
             )
             if dlg.ShowModal() == wx.ID_YES:
-                pass
+                self.thread = setwallpaper.AutoSet(self.reader.images)
+                self.isthreadon = True
             else:
                 return
-        self.thread = setwallpaper.AutoSet(self.filepath)
-        self.isthreadon = True
+            
 
     def OnClose(self, evt):
         if os.path.isfile(self.buttons[0].GetLabel()):
-            self.lightbg = self.buttons[0].GetLabel()
+            self.reader.images["light"] = self.buttons[0].GetLabel()
 
         if os.path.isfile(self.buttons[1].GetLabel()):
-            self.darkbg = self.buttons[1].GetLabel()
+            self.reader.images["drak"] = self.buttons[1].GetLabel()
+
         self.isclosed = True
-        # evt.Skip()
         self.Hide()
 
     def ToggleMode(self):
@@ -248,3 +242,9 @@ class MainWindow(wx.Frame):
             else:
                 self.Save()
 
+    def ToggleNotify(self, menuitem:wx.MenuItem, skip_replace:bool=False) -> bool:
+        arr = {True: False, False:True}
+        if not skip_replace:
+            imports.NOTIF = arr[imports.NOTIF]
+        menuitem.SetItemLabel(_("Notify me on wallpaper changes") if not imports.NOTIF else _("Don't notify me on wallpaper changes"))
+        return imports.NOTIF

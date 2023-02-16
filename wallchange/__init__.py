@@ -30,18 +30,12 @@ def start_app():
     mainwind.Show()
 
     if argc > 0:
-        try:
-            childs, tree = callbacks.ReadXML(args[1])
-        except callbacks.XMLParseError:
-            pass
-        else:
-            lightbg = childs["light"]
-            darkbg = childs["dark"]
-            root.frame.buttons[0].SetLabel(lightbg)
-            root.frame.buttons[1].SetLabel(darkbg)
-            root.frame.filepath = args[1]
-            root.frame.tree = tree
-            root.frame.SetTitle("WallChange - {}".format(args[1]))
-            root.frame.SetStatusText(args[1])
+        mainwind.reader.read(args[0])
+        mainwind.buttons[0].SetLabel(mainwind.reader.images["light"])
+        mainwind.buttons[1].SetLabel(mainwind.reader.images["dark"])
+        mainwind.filepath = args[0]
+        mainwind.SetTitle("WallChange - {}".format(args[1]))
+        mainwind.SetStatusText(args[0])
+        mainwind.Refresh()
 
     root.MainLoop()
