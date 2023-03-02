@@ -45,11 +45,11 @@ class WallchangeWindow(Adw.ApplicationWindow):
     
     def lightbg_dlg(self, button):
         self.filehandler.OpenImg(self, "Light")
-        self.lightbg.set_label(imports.LightBg)
+        self.lightbg.set_text(imports.LightBg)
     
     def dark_dlg(self, button):
         self.filehandler.OpenImg(self, "Dark")
-        self.darkbg.set_label(imports.DarkBg)
+        self.darkbg.set_text(imports.DarkBg)
 
 @Gtk.Template(resource_path='/me/lebao3105/wallchange/views/prefs.ui')
 class PreferencesWindow(Adw.PreferencesWindow):
