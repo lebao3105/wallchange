@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="adw" version="1.0"/>
+  <template class="PreferencesWindow" parent="AdwPreferencesWindow">
+    <property name="title">Preferences</property>
+    <child>
+      <object class="AdwPreferencesPage">
+        <child>
+          <object class="AdwPreferencesGroup">
+            <property name="title">General</property>
+            <child>
+              <object class="AdwActionRow">
+                <property name="title">Do not distrub</property>
+                <property name="subtitle">Don't notify me on wallpaper changes</property>
+                <child>
+                  <object class="GtkSwitch">
+                    <property name="valign">center</property>
+                    <signal name="notify::active" handler="on_switch_button" swapped="no"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

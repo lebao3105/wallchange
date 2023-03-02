@@ -1,28 +1,20 @@
-project(
-    'me.lebao3105.wallchange',
-    version: '0.1.0',
-    meson_version: '>=0.59.0'
+project('wallchange',
+          version: '0.1.0',
+    meson_version: '>= 0.59.0',
+  default_options: [ 'warning_level=2', 'werror=false', ],
 )
 
-# Imports
-app_id = meson.project_name()
-py = import('python')
+i18n = import('i18n')
+gnome = import('gnome')
 
-py_inst = py.find_installation('python3')
 
-if not py_inst.found()
-    error('Python installation not found!')
-endif
 
-if not py_inst.language_version().version_compare('>= 3.8')
-    error('Please use Python 3.8 or higher')
-endif
-
-# Dirs
-prefix = get_option('prefix')
-localedir = join_paths(prefix, get_option('localedir'))
-moduledir = join_paths(prefix, get_option('datadir'), app_id)
-
-subdir('icons')
+subdir('data')
+subdir('src')
 subdir('po')
-subdir('wallchange')
+
+gnome.post_install(
+     glib_compile_schemas: true,
+    gtk_update_icon_cache: true,
+  update_desktop_database: true,
+)

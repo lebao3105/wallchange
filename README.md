@@ -1,37 +1,24 @@
-[![Build Wheels](https://github.com/lebao3105/wallchange/actions/workflows/wheels.yml/badge.svg)](https://github.com/lebao3105/wallchange/actions/workflows/wheels.yml)
 ## Wallchange
-An automated tool to set your desktop background!
+An automated tool to set your desktop background, now has a specific version for Linux!
 
 ## Running
-This project requires Python 3.8+ with pip installed. Tested on **Windows** and **Linux**.
+> Warning: This version is not ready for production yet. It may not work for all desktops, even with the current main branch (wxPython interface).
 
-Install dependencies first:
-```bash
-$ pip install attrdict3
-$ pip install -r requirements.txt
-```
+This project requires Python 3.8+ with pip installed. For cross-platform version, please check for the main branch.
+The entire project, is not tested on macOS yet.
+
+Requirements:
+* gtk4
+* libadwaita
+* meson
+* ninja
+* gettext
 
 Use meson to install:
 ```bash
 $ meson setup build # Add --prefix=~/.local for local installation
 $ ninja -C build install
 $ me.lebao3105.wallchange [filepath] # Run
-```
-
-Or install using generated wheels on (https://github.com/lebao3105/wallchange/actions/workflows/wheels.yml):
-```bash
-$ pip install <downloaded .whl file> --force-reinstall
-```
-
-Or:
-```bash
-$ pip install build wheel
-$ pip install . --force-reinstall
-```
-
-Run without installing:
-```bash
-$ python3 -m wallchange [filepath] # Run
 ```
 
 ## Usage
@@ -75,3 +62,5 @@ You can change the path in the ```image``` tag under both ```dark``` and ```ligh
 ## Inspirations
 * [Dynamic-wallpaper](https://github.com/dusansimic/dynamic-wallpaper)
 * GNOME Shell's auto wallpaper change on system theme change
+
+> My goal is not only implement features like Dynamic-wallpaper for GNOME Shell (Dynamic-wallpaper fits better with GNOME), but also for all other Linux desktops.

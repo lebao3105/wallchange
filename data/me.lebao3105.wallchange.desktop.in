@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=wallchange
+Exec=wallchange
+Icon=me.lebao3105.wallchange
+Terminal=false
+Type=Application
+Categories=GTK;
+StartupNotify=true

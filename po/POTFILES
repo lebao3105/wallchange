@@ -1,3 +1,6 @@
-wallchange/callbacks.py
-wallchange/mainwindow.py
-wallchange/setwallpaper.py
+data/me.lebao3105.wallchange.desktop.in
+data/me.lebao3105.wallchange.appdata.xml.in
+data/me.lebao3105.wallchange.gschema.xml
+src/main.py
+src/window.py
+src/window.ui

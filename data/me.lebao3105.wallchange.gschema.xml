@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="wallchange">
+	<schema id="me.lebao3105.wallchange" path="/me/lebao3105/wallchange/">
+		<key name='last-opened-file' type='s'>
+			<default>""</default>
+			<summary>Last opened WC manifest file</summary>
+		</key>
+		<key name='notify-me' type='b'>
+			<default>true</default>
+			<summary>Notify me on wallpaper changes</summary>
+		</key>
+	</schema>
+</schemalist>
