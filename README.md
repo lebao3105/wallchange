@@ -11,14 +11,13 @@ Requirements:
 * gtk4
 * libadwaita
 * meson
-* ninja
 * gettext
 
 Use meson to install:
 ```bash
 $ meson setup build # Add --prefix=~/.local for local installation
 $ ninja -C build install
-$ me.lebao3105.wallchange [filepath] # Run
+$ wallchange [filepath] # Run
 ```
 
 ## Usage
@@ -53,7 +52,7 @@ The configuration is saved in a XML file. Here's the content on my file:
 </data>
 ```
 
-You can change the path in the ```image``` tag under both ```dark``` and ```light``` tags - open it by pass your full path to the file to the app.
+You can change the path in the ```image``` tag under both ```dark``` and ```light``` tags - open it and pass your full path to the file to the app.
 
 ## Issue(s)
 * If you use GNOME 42+, you may see that your wallpaper used in this program not used in your desktop when you change the system color. It occurred due to the new wallpaper system (WallChange based on that). Now I fixed it by setting another schema path for dark mode (/org/gnome/desktop/background/picture-uri-dark).
