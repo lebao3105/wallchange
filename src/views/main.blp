@@ -1,0 +1,118 @@
+using Gtk 4.0;
+using Adw 1;
+
+template MainWindow: Adw.ApplicationWindow {
+    title: "WallChange";
+    default-width: 600;
+    default-height: 600;
+
+    Box {
+        orientation: vertical;
+
+        Adw.HeaderBar {
+            centering-policy: strict;
+            title-widget: Adw.WindowTitle {
+                title: "WallChange";
+            };
+
+            [start]
+            Button open_btn {
+                icon-name: "document-open-symbolic";
+                clicked => openfile_dlg();
+            }
+
+            [end]
+            MenuButton {
+                icon-name: "open-menu-symbolic";
+                menu-model: primary_menu;
+            }
+        }
+
+        Adw.ToastOverlay {
+            margin-top: 12;
+            margin-end: 12;
+            margin-bottom: 12;
+            margin-start: 12;
+
+            Adw.Clamp {
+                Box {
+                    Adw.PreferencesPage {
+                        Adw.PreferencesGroup{
+                            title: "Backgrounds";
+
+                            Adw.ActionRow {
+                                title: _("Light background");
+                                Label lightbg {
+                                    valign: center;
+                                }
+
+                                Button lightbg_btn {
+                                    valign: center;
+                                    icon-name: "document-open-symbolic";
+                                    clicked => lightbg_dlg();
+                                }
+                            }
+
+                            Adw.ActionRow {
+                                title: _("Light background");
+                                Label darkbg {
+                                    valign: center;
+                                }
+
+                                Button darkbg_btn {
+                                    valign: center;
+                                    icon-name: "document-open-symbolic";
+                                    clicked => darkbg_dlg();
+                                }
+                            }
+                        }
+
+                        Adw.PreferencesGroup{
+                            title: "Actions";
+
+                            Adw.ActionRow {
+                                title: _("Save?");
+                                Switch {
+                                    valign: center;
+                                    notify::active => save_toggled();
+                                }
+                            }
+
+                            Adw.ActionRow {
+                                title: _("Start the timing");
+                                Switch {
+                                    valign: center;
+                                    notify::active => timing_toggled();
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+    
+        Adw.Toast toast {
+            /* Nothing here yet */
+        }
+    }
+}
+
+menu primary_menu {
+    section {
+        item {
+            label: _("Keyboard shortcuts");
+            action: "win.show-help-overlay";
+        }
+
+        item {
+            label: _("Preferences");
+            action: "app.preferences";
+        }
+
+        item {
+            label: _("About WallChange");
+            action: "app.about";
+        }
+    }
+}

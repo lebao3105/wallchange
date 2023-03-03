@@ -1,0 +1,22 @@
+using Gtk 4.0;
+using Adw 1;
+
+template PreferencesWindow : Adw.PreferencesWindow {
+  title: "Preferences";
+
+  Adw.PreferencesPage {
+    Adw.PreferencesGroup {
+      title: "General";
+
+      Adw.ActionRow {
+        title: "Do not distrub";
+        subtitle: "Don\'t notify me on wallpaper changes";
+
+        Switch {
+          valign: center;
+          notify::active => on_switch_button();
+        }
+      }
+    }
+  }
+}

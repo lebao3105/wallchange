@@ -24,7 +24,7 @@
         "*.a"
     ],
     "modules" : [
-    	"python3-requirements.json",
+    	"subrequirements.json",
         {
             "name" : "wallchange",
             "builddir" : true,

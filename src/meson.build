@@ -2,11 +2,28 @@ pkgdatadir = join_paths(get_option('prefix'), get_option('datadir'), meson.proje
 moduledir = join_paths(pkgdatadir, 'wallchange')
 gnome = import('gnome')
 
+blueprint = custom_target('blueprint',
+  input: files(
+    'gtk/help-overlay.blp',
+    'views/main.blp',
+    'views/prefs.blp'
+  ),
+  output: '.',
+  command: [
+    find_program('blueprint-compiler'),
+    'batch-compile',
+    '@OUTPUT@',
+    '@CURRENT_SOURCE_DIR@',
+    '@INPUT@'
+  ]
+)
+
 gnome.compile_resources('wallchange',
   'wallchange.gresource.xml',
   gresource_bundle: true,
   install: true,
   install_dir: pkgdatadir,
+  dependencies: blueprint
 )
 
 python = import('python')
