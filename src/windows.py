@@ -22,41 +22,39 @@ from gi.repository import Gtk
 from .callbacks import FileHandler
 from . import imports
 
-@Gtk.Template(resource_path='/me/lebao3105/wallchange/views/window.ui')
+@Gtk.Template(resource_path='/me/lebao3105/wallchange/views/main.ui')
 class WallchangeWindow(Adw.ApplicationWindow):
-    __gtype_name__ = 'WallchangeWindow'
-
-    open_btn = Gtk.Template.Child()
-    lightbg_btn = Gtk.Template.Child()
-    darkbg_btn = Gtk.Template.Child()
+    __gtype_name__ = 'MainWindow'
 
     lightbg = Gtk.Template.Child()
     darkbg = Gtk.Template.Child()
+    filehandler = FileHandler()
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-        self.filehandler = FileHandler()
-        self.open_btn.connect('clicked', self.openfile_dlg)
-        self.lightbg_btn.connect('clicked', self.lightbg_dlg)
-
+    @Gtk.Template.Callback()
     def openfile_dlg(self, button):
         return self.filehandler.OpenXML(self)
     
+    @Gtk.Template.Callback()
     def lightbg_dlg(self, button):
         self.filehandler.OpenImg(self, "Light")
         self.lightbg.set_text(imports.LightBg)
     
-    def dark_dlg(self, button):
+    @Gtk.Template.Callback()
+    def darkbg_dlg(self, button):
         self.filehandler.OpenImg(self, "Dark")
         self.darkbg.set_text(imports.DarkBg)
+
+    @Gtk.Template.Callback()
+    def save_toggled(self, switch, GParamBoolean):
+        self.save = switch.get_active()
+    
+    @Gtk.Template.Callback()
+    def timing_toggled(self, switch, GParamBoolean):
+        self.timing = switch.get_active()
 
 @Gtk.Template(resource_path='/me/lebao3105/wallchange/views/prefs.ui')
 class PreferencesWindow(Adw.PreferencesWindow):
     __gtype_name__ = 'PreferencesWindow'
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
 
     @Gtk.Template.Callback()
     def on_switch_button(self, switch, GParamBoolean):
