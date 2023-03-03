@@ -2,5 +2,6 @@ data/me.lebao3105.wallchange.desktop.in
 data/me.lebao3105.wallchange.appdata.xml.in
 data/me.lebao3105.wallchange.gschema.xml
 src/main.py
-src/window.py
-src/window.ui
+src/windows.py
+src/views/main.blp
+src/views/prefs.blp

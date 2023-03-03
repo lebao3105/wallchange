@@ -1,0 +1,46 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the wallchange package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: wallchange\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-03 20:51+0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: data/me.lebao3105.wallchange.desktop.in:3
+msgid "wallchange"
+msgstr ""
+
+#: data/me.lebao3105.wallchange.appdata.xml.in:7
+msgid "Change your desktop background dynamically!"
+msgstr ""
+
+#: data/me.lebao3105.wallchange.gschema.xml:6
+msgid "Last opened WC manifest file"
+msgstr ""
+
+#: data/me.lebao3105.wallchange.gschema.xml:10
+msgid "Notify me on wallpaper changes"
+msgstr ""
+
+#: src/views/main.blp:44 src/views/main.blp:53 src/views/main.blp:66
+msgid "Light background"
+msgstr ""
+
+#: src/views/main.blp:82
+msgid "Preferences"
+msgstr ""
+
+#: src/views/main.blp:87
+msgid "About WallChange"
+msgstr ""
