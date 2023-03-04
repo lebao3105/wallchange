@@ -2,7 +2,7 @@
 An automated tool to set your desktop background, now has a specific version for Linux!
 
 ## Running
-> Warning: This version is not ready for production yet. It may not work for all desktops, even with the current main branch (wxPython interface).
+> Warning: This version is not ready for production yet. It may not work for all desktop environments, even with the current main branch (wxPython interface).
 
 This project requires Python 3.8+ with pip installed. For cross-platform version, please check for the main branch.
 The entire project, is not tested on macOS yet.
