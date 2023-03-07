@@ -19,55 +19,72 @@
 
 import darkdetect
 import gi
-import shutil
+import os.path
+import threading
 
-gi.require_version('Notify', '0.7')
+gi.require_version("Notify", "0.7")
 from gi.repository import Adw, Notify
 from . import imports
 
-class AutoWallpaper(object):
 
+class AutoWallpaper(object):
     def __init__(self, toastoverlay: Adw.ToastOverlay):
         self.toaster = toastoverlay
-    
-    def getPreferedColor(self):
-        return darkdetect.theme().lower() # This project depends on shell + application themes
+
+    def applySchemas(self):
+        if not imports.DarkBg or imports.LightBg:
+            return False
+        imports.AppSchemas.set_string("dark-wallpaper", imports.DarkBg)
+        imports.AppSchemas.set_string("light-wallpaper", imports.LightBg)
+        imports.AppSchemas.apply()
 
     def SetWallpaper(self, variant: str):
-        path = self.__dict__[variant + "bg"]
-        uri = "'file://%s'" % path
-        
-        if not shutil.which(path):
-            self.ShowNotification(_('Image path not found: %s' % path))
+        path_ = imports.__dict__[variant + "Bg"]
+        uri = "'file://%s'" % path_
+
+        if not os.path.isfile(path_):
+            self.ShowNotification(_("Image path not found: %s" % path_))
             return False
-        imports.ShellSchemas.set_string('picture-uri-%s' % variant, uri)
+        imports.ShellSchemas.set_string("picture-uri-%s" % variant, uri)
         imports.ShellSchemas.apply()
-        
+
         if imports.NOTIF:
-            Notify.init('me.lebao3105.wallchange')
-            Notify.Notification.new(_('Successfully set wallpaper %s' % path)).Show()
+            Notify.init("me.lebao3105.wallchange")
+            Notify.Notification.new(_("Successfully set wallpaper %s" % path_)).Show()
             Notify.uninit()
-        self.ShowNotification(_('Successfully set wallpaper %s' % path))
+        self.ShowNotification(_("Successfully set wallpaper %s" % path_))
         return True
-    
+
     def ShowNotification(self, msg: str, action: str = "", action_label: str = ""):
         toast = Adw.Toast.new(msg)
         if action and action_label != "":
             toast.set_button_label(action_label)
             toast.set_action_name(action)
-        
+
         return self.toaster.add_toast(toast)
 
-    def AutoSet(self, childs: dict): # TODO: Fix this parameter
-        def setwall(theme):
+    def AutoSet(self, theme: str):
+        def setwall(_theme):
             themes = {
                 Adw.ColorScheme.DEFAULT: "light",
                 Adw.ColorScheme.FORCE_DARK: "dark",
                 Adw.ColorScheme.FORCE_LIGHT: "light",
-                Adw.ColorScheme.PREFER_DARK: self.getPreferedColor(),
-                Adw.ColorScheme.PREFER_LIGHT: self.getPreferedColor()
+                Adw.ColorScheme.PREFER_DARK: theme.lower(),
+                Adw.ColorScheme.PREFER_LIGHT: theme.lower(),
             }
-            self.__dict__[theme + "bg"] = childs[f"{themes[theme]}"]
-            return self.SetWallpaper(theme)
+            return self.SetWallpaper(themes[_theme])
 
         return setwall(imports.StyleMgr.get_color_scheme())
+
+    def StartThread(self):
+        self.thread = threading.Thread(
+            target=darkdetect.listener, args=self.AutoSet, daemon=True
+        )
+        self.thread.start()
+        self.ShowNotification(_("Thread started."))
+
+    def StopThread(self):
+        if hasattr(self, "thread"):
+            del self.thread
+        else:
+            print("Code mistake: Thread not started or already killed")

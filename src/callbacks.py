@@ -23,18 +23,29 @@ import xml.etree.cElementTree as ET
 from gi.repository import Gtk, Adw
 from . import imports
 
-class XMLParseError(Exception):
 
-    def __init__(self, msg: str, dont_show_toast: bool = False, toastoverlay: Adw.ToastOverlay = None):
+class XMLParseError(Exception):
+    def __init__(
+        self,
+        msg: str,
+        dont_show_toast: bool = False,
+        toastoverlay: Adw.ToastOverlay = None,
+    ):
         if not dont_show_toast:
             if not toastoverlay:
-                raise Exception("dont_show_toast parameter set to False but toast is None")
+                raise Exception(
+                    "dont_show_toast parameter set to False but toast is None"
+                )
             toastoverlay.add_toast(Adw.Toast.new(msg))
 
         super().__init__(msg)
 
+
+def PushToast(toastoverlay: Adw.ToastOverlay, msg: str):
+    return toastoverlay.add_toast(Adw.Toast.new(msg))
+
+
 class FileHandler(object):
-    
     currfile: str = ""
     tree = ET.ElementTree()
     configs: dict = {}
@@ -61,8 +72,8 @@ class FileHandler(object):
 
         dialog = Gtk.FileChooserNative(
             title=_("Open a file to continue"),
-            transient_for=self.parent, # https://gitlab.gnome.org/GNOME/pygobject/-/issues/484
-            action=Gtk.FileChooserAction.OPEN
+            transient_for=self.parent,  # https://gitlab.gnome.org/GNOME/pygobject/-/issues/484
+            action=Gtk.FileChooserAction.OPEN,
         )
 
         dialog.connect("response", OpenXML_)
@@ -77,7 +88,7 @@ class FileHandler(object):
         dialog = Gtk.FileChooserNative(
             title=_("Open a file to continue"),
             transient_for=self.parent,
-            action=Gtk.FileChooserAction.OPEN
+            action=Gtk.FileChooserAction.OPEN,
         )
 
         dialog.connect("response", OpenImg_)
@@ -88,51 +99,54 @@ class FileHandler(object):
         if self.currfile == "" or not os.path.isfile(self.currfile):
             raise XMLParseError(
                 _("Code error: FileHandler.currfile is blank or invalid data"),
-                self.toaster
+                self.toaster,
             )
 
         if self.tree.getroot().tag != "data":
             raise XMLParseError(
-                _("Invalid root element on file: %s instead of 'data'" % self.tree.getroot().tag),
-                self.toaster
+                _(
+                    "Invalid root element on file: %s instead of 'data'"
+                    % self.tree.getroot().tag
+                ),
+                self.toaster,
             )
         else:
             for child in self.tree.getroot():
                 if child.tag not in ["light", "dark", "config"]:
                     raise XMLParseError(
-                        _("Required tags not found: light, dark"),
-                        self.toaster
-                    ) # config is optional, but suggested
-                
+                        _("Required tags not found: light, dark"), self.toaster
+                    )  # config is optional, but suggested
+
                 if child.tag == "config":
                     for text in ["notif"]:
                         self.configs[text] = child.find(text).text
 
                 elif child.tag == "light" or "dark":
-                    img = child.find("image").text # type: ignore
+                    img = child.find("image").text  # type: ignore
                     if os.path.isfile(img):
-                        arr = ["L", "D"]
-                        for item in arr:
-                            if child.tag.startswith(item.lower()):
-                                child.tag = item + child.tag[1:]
                         imports.__dict__["%sBg" % child.tag] = img
                     else:
                         raise XMLParseError(
-                            _("Image for background %s variant not found: %s"
-                            % child.tag, img), self.toaster
+                            _(
+                                "Image for background %s variant not found: %s"
+                                % child.tag,
+                                img,
+                            ),
+                            self.toaster,
                         )
-    
-    def WriteNew(self, showtoast:bool = True, show_save_dialog:bool = True):
+
+    def WriteNew(self):
         ready: bool = False
 
         def dialog_response(dlg, response):
             nonlocal ready
             if response == Gtk.ResponseType.ACCEPT:
                 self.currfile = dlg.get_file().get_path()
+                print(self.currfile, dlg.get_file().get_path())
                 ready = True
             else:
                 ready = False
-            
+
         def MakeTree():
             tree = ET.Element("data")
             config = ET.Element(tree, "config")
@@ -144,21 +158,23 @@ class FileHandler(object):
             ET.SubElement(config, "notif").text = str(imports.NOTIF)
 
             return tree
-        
-        if not os.path.isfile(imports.DarkBg):
-            raise XMLParseError(_("Dark wallpaper not found in PC or not selected"), False, self.toaster)
-        
-        if not os.path.isfile(imports.LightBg):
-            raise XMLParseError(_("Light wallpaper not found in PC or not selected"), False, self.toaster)
-        
-        if show_save_dialog:
+
+        if not os.path.isfile(imports.darkBg):
+            PushToast(self.toaster, _("Dark wallpaper not found in PC or not selected"))
+
+        if not os.path.isfile(imports.lightBg):
+            PushToast(
+                self.toaster, _("Light wallpaper not found in PC or not selected")
+            )
+
+        if not self.currfile:
             dialog = Gtk.FileChooserNative(
                 title=_("File save"),
                 transient_for=self.parent,
-                action=Gtk.FileChooserAction.SAVE
+                action=Gtk.FileChooserAction.SAVE,
             )
             dialog.add_filter(self.xmlflt)
-            dialog.connect('response', dialog_response)
+            dialog.connect("response", dialog_response)
             dialog.show()
 
         if ready:
@@ -166,8 +182,13 @@ class FileHandler(object):
             with open(self.currfile, "wb") as f:
                 f.write('<?xml version="1.0" encoding="UTF-8">\n'.encode("utf-8"))
                 f.write(ET.tostring(tree, "utf-8"))
+            self.toaster.add_toast(
+                Adw.Toast.new(
+                    _(
+                        "Made a new file %s - please check if the operation is really completed."
+                        % self.currfile
+                    )
+                )
+            )
         else:
             return
-        
-        if showtoast:
-            self.toaster.add_toast(Adw.Toast.new(_("Wrote file %s - please check if the operation is really completed." % self.currfile)))

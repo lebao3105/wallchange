@@ -24,62 +24,60 @@ from .callbacks import FileHandler
 from .setwallpaper import AutoWallpaper
 from . import imports
 
-@Gtk.Template(resource_path='/me/lebao3105/wallchange/views/main.ui')
+
+@Gtk.Template(resource_path="/me/lebao3105/wallchange/views/main.ui")
 class WallchangeWindow(Adw.ApplicationWindow):
-    __gtype_name__ = 'MainWindow'
+    __gtype_name__ = "MainWindow"
 
     lightbg = Gtk.Template.Child()
     darkbg = Gtk.Template.Child()
     toastoverlay = Gtk.Template.Child()
+    thread = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.filehandler = FileHandler(self, self.toastoverlay)
-        self.autowall = AutoWallpaper(imports.DarkBg, imports.LightBg, self.toastoverlay)
+        self.autowall = AutoWallpaper(self.toastoverlay)
 
     @Gtk.Template.Callback()
     def openfile_dlg(self, button):
         return self.filehandler.OpenXML()
-    
+
     @Gtk.Template.Callback()
     def lightbg_dlg(self, button):
-        if self.filehandler.OpenImg("Light"):
-            self.lightbg.set_text(imports.LightBg)
-    
+        if self.filehandler.OpenImg("light"):
+            self.lightbg.set_text(imports.lightBg)
+
     @Gtk.Template.Callback()
     def darkbg_dlg(self, button):
-        if self.filehandler.OpenImg("Dark"):
-            self.darkbg.set_text(imports.DarkBg)
+        if self.filehandler.OpenImg("dark"):
+            self.darkbg.set_text(imports.darkBg)
 
     @Gtk.Template.Callback()
     def save_toggled(self, button):
         return self.filehandler.WriteNew()
-    
+
     @Gtk.Template.Callback()
     def timing_toggled(self, button):
-        self.wallthread = threading.Thread(
-            target=self.autowall.getPreferedColor(),
-            args=self.autowall.AutoSet({
-                "light": imports.LightBg,
-                "dark": imports.DarkBg
-            }),
-            daemon=True
-        )
-        self.wallthread.start()
+        if self.thread.get_text() == _("Start now"):
+            self.autowall.StartThread()
+            self.thread.set_text(_("Stop"))
+        elif self.thread.get_text() == _("Stop"):
+            self.autowall.StopThread()
 
-@Gtk.Template(resource_path='/me/lebao3105/wallchange/views/prefs.ui')
+
+@Gtk.Template(resource_path="/me/lebao3105/wallchange/views/prefs.ui")
 class PreferencesWindow(Adw.PreferencesWindow):
-    __gtype_name__ = 'PreferencesWindow'
+    __gtype_name__ = "PreferencesWindow"
 
     @Gtk.Template.Callback()
     def on_switch_button(self, switch, GParamBoolean):
         if switch.get_active():
-            #print('activated')
+            # print('activated')
             imports.NOTIF = True
         else:
-            #print('turned off')
+            # print('turned off')
             imports.NOTIF = False
-            
-        imports.AppSchemas.set_boolean('notify-me', imports.NOTIF)
+
+        imports.AppSchemas.set_boolean("notify-me", imports.NOTIF)
         imports.AppSchemas.apply()
-    

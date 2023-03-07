@@ -27,8 +27,8 @@ AppSchemas.sync()
 ShellSchemas.sync()
 
 StyleMgr = Adw.StyleManager()
-NOTIF: bool = AppSchemas.get_boolean('notify-me')
+NOTIF: bool = AppSchemas.get_boolean("notify-me")
 
 # Backgrounds
-DarkBg: str = ""
-LightBg: str = ""
+darkBg: str = AppSchemas.get_string("dark-wallpaper") or ""
+lightBg: str = AppSchemas.get_string("light-wallpaper") or ""
