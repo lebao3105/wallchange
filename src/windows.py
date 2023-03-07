@@ -17,9 +17,11 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import threading
 from gi.repository import Adw
 from gi.repository import Gtk
 from .callbacks import FileHandler
+from .setwallpaper import AutoWallpaper
 from . import imports
 
 @Gtk.Template(resource_path='/me/lebao3105/wallchange/views/main.ui')
@@ -28,29 +30,42 @@ class WallchangeWindow(Adw.ApplicationWindow):
 
     lightbg = Gtk.Template.Child()
     darkbg = Gtk.Template.Child()
-    filehandler = FileHandler()
+    toastoverlay = Gtk.Template.Child()
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.filehandler = FileHandler(self, self.toastoverlay)
+        self.autowall = AutoWallpaper(imports.DarkBg, imports.LightBg, self.toastoverlay)
 
     @Gtk.Template.Callback()
     def openfile_dlg(self, button):
-        return self.filehandler.OpenXML(self)
+        return self.filehandler.OpenXML()
     
     @Gtk.Template.Callback()
     def lightbg_dlg(self, button):
-        self.filehandler.OpenImg(self, "Light")
-        self.lightbg.set_text(imports.LightBg)
+        if self.filehandler.OpenImg("Light"):
+            self.lightbg.set_text(imports.LightBg)
     
     @Gtk.Template.Callback()
     def darkbg_dlg(self, button):
-        self.filehandler.OpenImg(self, "Dark")
-        self.darkbg.set_text(imports.DarkBg)
+        if self.filehandler.OpenImg("Dark"):
+            self.darkbg.set_text(imports.DarkBg)
 
     @Gtk.Template.Callback()
-    def save_toggled(self, switch, GParamBoolean):
-        self.save = switch.get_active()
+    def save_toggled(self, button):
+        return self.filehandler.WriteNew()
     
     @Gtk.Template.Callback()
-    def timing_toggled(self, switch, GParamBoolean):
-        self.timing = switch.get_active()
+    def timing_toggled(self, button):
+        self.wallthread = threading.Thread(
+            target=self.autowall.getPreferedColor(),
+            args=self.autowall.AutoSet({
+                "light": imports.LightBg,
+                "dark": imports.DarkBg
+            }),
+            daemon=True
+        )
+        self.wallthread.start()
 
 @Gtk.Template(resource_path='/me/lebao3105/wallchange/views/prefs.ui')
 class PreferencesWindow(Adw.PreferencesWindow):

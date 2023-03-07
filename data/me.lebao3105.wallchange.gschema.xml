@@ -9,5 +9,14 @@
 			<default>true</default>
 			<summary>Notify me on wallpaper changes</summary>
 		</key>
+		<!-- Use for future releases? -->
+		<key name='dark-wallpaper' type='s'>
+			<default>""</default>
+			<summary>Current dark wallpaper</summary>
+		</key>
+		<key name='light-wallpaper' type='s'>
+			<default>""</default>
+			<summary>Current light wallpaper</summary>
+		</key>
 	</schema>
 </schemalist>

@@ -19,6 +19,7 @@ template MainWindow: Adw.ApplicationWindow {
             Button open_btn {
                 icon-name: "document-open-symbolic";
                 clicked => openfile_dlg();
+                styles ["suggested-action"]
             }
 
             [end]
@@ -28,14 +29,17 @@ template MainWindow: Adw.ApplicationWindow {
             }
         }
 
-        Adw.ToastOverlay {
+        Adw.ToastOverlay toastoverlay {
             margin-top: 12;
             margin-end: 12;
             margin-bottom: 12;
             margin-start: 12;
+            vexpand: true;
 
             Adw.Clamp {
                 Box {
+                    orientation: vertical;
+
                     Adw.PreferencesPage {
                         Adw.PreferencesGroup{
                             title: "Backgrounds";
@@ -54,7 +58,7 @@ template MainWindow: Adw.ApplicationWindow {
                             }
 
                             Adw.ActionRow {
-                                title: _("Light background");
+                                title: _("Dark background");
                                 Label darkbg {
                                     valign: center;
                                 }
@@ -72,17 +76,19 @@ template MainWindow: Adw.ApplicationWindow {
 
                             Adw.ActionRow {
                                 title: _("Save?");
-                                Switch {
+                                Button {
                                     valign: center;
-                                    notify::active => save_toggled();
+                                    label: _("Do it!");
+                                    clicked => save_toggled();
                                 }
                             }
 
                             Adw.ActionRow {
-                                title: _("Start the timing");
-                                Switch {
+                                title: _("Timing");
+                                Button {
                                     valign: center;
-                                    notify::active => timing_toggled();
+                                    label: _("Start now");
+                                    clicked => timing_toggled();
                                 }
                             }
                         }
@@ -92,9 +98,6 @@ template MainWindow: Adw.ApplicationWindow {
             }
         }
     
-        Adw.Toast toast {
-            /* Nothing here yet */
-        }
     }
 }
 
